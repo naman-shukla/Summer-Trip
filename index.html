@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sequential Master Itinerary: Nice, Venice, Dolomites, Como & Milan</title>
+<title>The Grand Tour '26: Nice, Dolomites, Como & Milan</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF9F6; color: #1e293b; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF9F6; color: #1e293b; overflow-x: hidden; }
 h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 .chart-container {
     position: relative;
     width: 100%;
     max-width: 100%;
-    height: 260px;
+    height: 250px;
 }
 .tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 .accordion-item.active .accordion-content { max-height: 1200px; }
 .accordion-icon { transition: transform 0.2s ease; }
@@ -28,139 +28,275 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
 .tag-amber { background-color: #fffbeb; color: #b45309; }
 .tag-purple { background-color: #faf5ff; color: #6d28d9; }
 .tag-emerald { background-color: #f0fdf4; color: #15803d; }
+.hero-bg {
+    background-image: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center center;
+}
 </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
-<!-- Mobile-Friendly Sticky Navigation -->
-<nav class="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-4xl mx-auto px-4">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 gap-3">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl">&#127956;</span>
-                <span class="font-bold text-lg tracking-tight text-stone-900">Riviera & Alpine Peak Tour</span>
-            </div>
-            <div class="flex justify-between sm:justify-end gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-                <button class="tab-link px-3.5 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors bg-stone-950 text-white" data-target="itinerary">Daily Itinerary</button>
-                <button class="tab-link px-3.5 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors" data-target="dashboard">Analytics Dashboard</button>
-                <button class="tab-link px-3.5 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors" data-target="compliance">UAE Driver Guide</button>
-            </div>
-        </div>
-    </div>
-</nav>
+<!-- Interactive Celebration Canvas -->
+<canvas id="celebrationCanvas" class="fixed inset-0 pointer-events-none z-50 hidden"></canvas>
 
-<main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
-
-    <!-- INTRODUCTORY SUMMARY BLOCK -->
-    <div class="bg-stone-900 rounded-2xl p-6 text-white shadow-sm mb-6 relative overflow-hidden">
-        <div class="absolute -right-8 -bottom-8 text-8xl opacity-10">&#9992;</div>
-        <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Sequential Route Locked</span>
-        <h1 class="text-3xl md:text-4xl font-bold mt-1 mb-2">France to Italy Master Plan</h1>
-        <p class="text-xs text-stone-300 leading-relaxed max-w-2xl">
-            This schedule is mathematically optimized to run seamlessly: Riviera Beaches (July 17–19), Flight to Venice & Ascent to Dolomites (July 20–22), Lake Como Road Trip (July 23), and Consolidated Milan Sights (July 24–25).
+<!-- SCREEN 1: COVER PAGE / LANDING GATE -->
+<div id="cover-page" class="min-h-screen hero-bg flex flex-col justify-between p-6 text-white text-center z-40 transition-all duration-700 ease-in-out">
+    <div></div>
+    
+    <div class="max-w-xl mx-auto space-y-6">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/40 px-3 py-1.5 rounded-full border border-emerald-500/30">Summer Expedition '26</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-none">Riviera & Alpine Peaks</h1>
+        <p class="text-sm md:text-base text-stone-300 max-w-md mx-auto leading-relaxed">
+            Your customized, seamless 9-day route traversing Nice, Venice, the majestic Dolomites, gorgeous Lake Como, and Milan.
         </p>
-    </div>
-
-    <!-- ITINERARY TAB -->
-    <div id="itinerary" class="tab-content active space-y-4">
-        <div class="text-stone-500 text-xs font-medium pb-2 flex justify-between items-center">
-            <span>&#128073; Tap any daily card to expand transit connections and checklists</span>
-            <span class="text-emerald-600 font-semibold">&#10004; Verified Chronology</span>
+        
+        <!-- Interactive Cover Prompt -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-xl space-y-4 mt-8">
+            <h3 class="text-lg font-bold text-amber-300">Are you excited for the journey?</h3>
+            <div class="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+                <button class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md" onclick="exitCover('happy')">
+                    Absolutely! 🌴
+                </button>
+                <button class="bg-stone-800 hover:bg-stone-700 active:scale-95 text-stone-200 font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md" onclick="exitCover('convince')">
+                    Convince me! 🏔️
+                </button>
+            </div>
         </div>
-        <div class="space-y-4" id="timeline-box">
-            <!-- Rendered Dynamically via JS -->
-        </div>
     </div>
+    
+    <div class="text-xs text-stone-400 font-semibold tracking-wider">
+        July 17 — July 25, 2026
+    </div>
+</div>
 
-    <!-- DASHBOARD TAB -->
-    <div id="dashboard" class="tab-content space-y-6">
-        <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-5">
-            <h2 class="text-xl font-bold text-stone-900">Expedition Metrics & Driving Log</h2>
-            <p class="text-xs text-stone-600 leading-relaxed">
-                By utilizing a high-speed flight on July 20th, and a high-flexibility one-way car rental from Venice Marco Polo Airport (VCE) to Milano Centrale/Malpensa (MXP), you eliminate over 6 hours of exhausting backtracking.
-            </p>
+<!-- SCREEN 2: MAIN SYSTEM APPLICATION (Hidden Initially) -->
+<div id="main-app" class="hidden flex-col min-h-screen transition-opacity duration-700 ease-in-out opacity-0">
+    <!-- Navigation Bar -->
+    <nav class="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">&#127794;</span>
+                    <span class="font-bold text-lg tracking-tight text-stone-900">Grand Tour '26</span>
+                </div>
+                <div class="flex justify-between sm:justify-end gap-1 overflow-x-auto pb-1 sm:pb-0">
+                    <button class="tab-link px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors bg-stone-950 text-white" data-target="itinerary">Daily Itinerary</button>
+                    <button class="tab-link px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors" data-target="checklist">Booking Checklist</button>
+                    <button class="tab-link px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors" data-target="gallery">Photo Gallery</button>
+                    <button class="tab-link px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors" data-target="dashboard">Analytics</button>
+                    <button class="tab-link px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-600 hover:bg-stone-50 transition-colors" data-target="compliance">UAE Driver Guide</button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Chart 1: Driving Time per Day -->
-                <div class="border border-stone-200 rounded-xl p-4 bg-stone-50/50">
-                    <h3 class="text-xs font-bold text-stone-800 uppercase tracking-wider mb-2">Daily Driving Load (Hours)</h3>
-                    <div class="chart-container">
-                        <canvas id="driveTimeChart"></canvas>
+    <!-- MAIN BODY CONTAINER -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
+
+        <!-- ITINERARY TAB -->
+        <div id="itinerary" class="tab-content active space-y-4">
+            <div class="text-stone-500 text-xs font-medium pb-2 flex justify-between items-center">
+                <span>&#128073; Tap any day to expand activities, maps, and tickets</span>
+                <span class="text-emerald-600 font-semibold">&#10004; Corrected Dates Sequence</span>
+            </div>
+            
+            <div class="space-y-4" id="timeline-box">
+                <!-- Timeline Cards Rendered Dynamically via JS -->
+            </div>
+        </div>
+
+        <!-- BOOKING CHECKLIST TAB -->
+        <div id="checklist" class="tab-content space-y-6">
+            <!-- Global Preparedness Tracker -->
+            <div class="bg-gradient-to-r from-stone-900 to-stone-800 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Pre-Trip Booking Monitor</span>
+                <h2 class="text-2xl font-bold mt-1 mb-4">Trip Readiness Score</h2>
+                
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs text-stone-300">
+                        <span>Preparation Completed</span>
+                        <span id="readiness-pct" class="font-bold text-amber-400">18%</span>
+                    </div>
+                    <div class="w-full bg-stone-700 h-3 rounded-full overflow-hidden">
+                        <div id="readiness-bar" class="bg-gradient-to-r from-amber-400 to-emerald-500 h-full transition-all duration-500" style="width: 18%"></div>
                     </div>
                 </div>
 
-                <!-- Chart 2: Travel Expenses -->
-                <div class="border border-stone-200 rounded-xl p-4 bg-stone-50/50">
-                    <h3 class="text-xs font-bold text-stone-800 uppercase tracking-wider mb-2">Estimated Transit Expenditures</h3>
-                    <div class="chart-container">
-                        <canvas id="budgetChart"></canvas>
+                <div class="grid grid-cols-2 gap-4 mt-6 border-t border-stone-700/60 pt-4">
+                    <div>
+                        <span class="block text-[10px] uppercase text-stone-400 font-semibold tracking-wider">Est. Remaining Cost</span>
+                        <span id="remaining-cost" class="text-xl font-bold text-white">€1,185</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-[10px] uppercase text-stone-400 font-semibold tracking-wider">Booked Elements</span>
+                        <span id="booked-count" class="text-xl font-bold text-emerald-400">2 / 11 Locked</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Road Trip Statistics Quick Facts -->
-            <div class="grid grid-cols-3 gap-3 text-center border-t border-stone-100 pt-4">
-                <div>
-                    <span class="block text-xl font-extrabold text-stone-900">~ 610 km</span>
-                    <span class="text-[10px] text-stone-400 uppercase font-semibold">Total Road Mileage</span>
-                </div>
-                <div>
-                    <span class="block text-xl font-extrabold text-emerald-600">€ 95 - 135</span>
-                    <span class="text-[10px] text-stone-400 uppercase font-semibold">Tolls & Fuel</span>
-                </div>
-                <div>
-                    <span class="block text-xl font-extrabold text-indigo-600">€ 80</span>
-                    <span class="text-[10px] text-stone-400 uppercase font-semibold">One-Way Drop Surcharge</span>
+            <!-- Booking Filters -->
+            <div class="flex gap-2 overflow-x-auto pb-1">
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-stone-900 text-white" onclick="filterChecklist('all')">All Tasks</button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-stone-200 text-stone-600 hover:bg-stone-50" onclick="filterChecklist('flights')">Flights & Transit</button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-stone-200 text-stone-600 hover:bg-stone-50" onclick="filterChecklist('stays')">Hotels & Chalets</button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-stone-200 text-stone-600 hover:bg-stone-50" onclick="filterChecklist('experiences')">Experiences & Prep</button>
+            </div>
+
+            <!-- Checklist Items Box -->
+            <div class="space-y-4" id="checklist-box">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+
+        <!-- GALLERY TAB -->
+        <div id="gallery" class="tab-content space-y-6">
+            <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-4">
+                <h2 class="text-2xl font-bold text-stone-900">Expedition Highlights</h2>
+                <p class="text-xs text-stone-500 leading-relaxed">
+                    A visual narrative of your upcoming journey. Drag, explore, and visualize the seamless transitions across Europe.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="relative rounded-xl overflow-hidden shadow-sm group">
+                        <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80" alt="Nice" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent p-4 flex flex-col justify-end">
+                            <h4 class="text-sm font-bold text-white">Nice & Surrounds</h4>
+                            <p class="text-[10px] text-stone-300">July 17 – 19 | French Riviera Beaches & Perched Villages</p>
+                        </div>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden shadow-sm group">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Dolomites" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent p-4 flex flex-col justify-end">
+                            <h4 class="text-sm font-bold text-white">The Dolomites</h4>
+                            <p class="text-[10px] text-stone-300">July 20 – 22 | Razor-Sharp Spires & High Pastures</p>
+                        </div>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden shadow-sm group">
+                        <img src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=800&q=80" alt="Como" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent p-4 flex flex-col justify-end">
+                            <h4 class="text-sm font-bold text-white">Lake Como</h4>
+                            <p class="text-[10px] text-stone-300">July 23 | Deep Glacial Waters & Elegant Villas</p>
+                        </div>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden shadow-sm group">
+                        <img src="https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?auto=format&fit=crop&w=800&q=80" alt="Milan" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent p-4 flex flex-col justify-end">
+                            <h4 class="text-sm font-bold text-white">Milan</h4>
+                            <p class="text-[10px] text-stone-300">July 24 – 25 | Cosmopolitan Duomo & Fashion Blocks</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- COMPLIANCE TAB -->
-    <div id="compliance" class="tab-content space-y-6">
-        <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-5">
-            <h2 class="text-xl font-bold text-stone-900">Dubai Driver's Compliance Checklist</h2>
-            <p class="text-xs text-stone-600 leading-relaxed">
-                Driving on public highways in Italy is highly organized, but camera enforcement is exceptionally strict. Make sure you complete this checklist before boarding your flight from Dubai:
-            </p>
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="tab-content space-y-6">
+            <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-5">
+                <h2 class="text-xl font-bold text-stone-900">Road Trip Analytics</h2>
+                <p class="text-xs text-stone-600 leading-relaxed">
+                    By flying from Nice (NCE) directly to Venice Airport (VCE) on July 20, you avoid tedious backtracking and free up massive vacation blocks. Renting a car in Venice and dropping it in Milan ensures a comfortable flow.
+                </p>
 
-            <div class="space-y-4">
-                <div class="border-l-4 border-l-red-500 bg-red-50/40 p-4 rounded-r-xl">
-                    <h3 class="text-sm font-bold text-stone-900 mb-1">1. International Driving Permit (IDP)</h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        <strong>Mandatory:</strong> In Italy, your standard physical UAE/Dubai driver's license is legally insufficient on its own. You must carry an official International Driving Permit. Apply online via the ATC UAE website or RTA app (approx. 150 AED). Italian car rental desks at Venice VCE will refuse key handovers without it.
-                    </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Daily Drive Time -->
+                    <div class="border border-stone-200 rounded-xl p-4 bg-stone-50/50">
+                        <h3 class="text-xs font-bold text-stone-800 uppercase tracking-wider mb-2">Daily Driving Load (Hours)</h3>
+                        <div class="chart-container">
+                            <canvas id="driveTimeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Budget Expenses -->
+                    <div class="border border-stone-200 rounded-xl p-4 bg-stone-50/50">
+                        <h3 class="text-xs font-bold text-stone-800 uppercase tracking-wider mb-2">Estimated Transit Expenditures</h3>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="border-l-4 border-l-amber-500 bg-amber-50/40 p-4 rounded-r-xl">
-                    <h3 class="text-sm font-bold text-stone-900 mb-1">2. Camera-Enforced ZTL Zones</h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        <strong>Avoid Tickets:</strong> Historic centers in Como, Milan, and Bolzano are camera-controlled restricted zones ("Zona a Traffico Limitato" or ZTL). Entering these without a resident permit results in automated €110+ tickets. Keep your car parked in designated underground municipal lots outside historical city arches.
-                    </p>
-                </div>
-
-                <div class="border-l-4 border-l-emerald-500 bg-emerald-50/40 p-4 rounded-r-xl">
-                    <h3 class="text-sm font-bold text-stone-900 mb-1">3. Highway Toll Ticket Handling</h3>
-                    <p class="text-xs text-stone-600 leading-relaxed">
-                        <strong>Autostrada Fares:</strong> When entering Italian toll-ways (indicated by green signs), press the button and pull the paper ticket from the machine slot. Keep this safe. When exiting, select lanes marked with blue signs (representing Card payments) and slide in your ticket followed by your credit card.
-                    </p>
+                <!-- Fast Facts -->
+                <div class="grid grid-cols-3 gap-3 text-center border-t border-stone-100 pt-4">
+                    <div>
+                        <span class="block text-xl font-extrabold text-stone-900">~ 610 km</span>
+                        <span class="text-[10px] text-stone-400 uppercase font-semibold">Total Driving</span>
+                    </div>
+                    <div>
+                        <span class="block text-xl font-extrabold text-emerald-600">€ 95 - 135</span>
+                        <span class="text-[10px] text-stone-400 uppercase font-semibold">Tolls & Fuel</span>
+                    </div>
+                    <div>
+                        <span class="block text-xl font-extrabold text-indigo-600">€ 80</span>
+                        <span class="text-[10px] text-stone-400 uppercase font-semibold">One-Way Fee</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</main>
+        <!-- COMPLIANCE TAB -->
+        <div id="compliance" class="tab-content space-y-6">
+            <div class="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-5">
+                <h2 class="text-xl font-bold text-stone-900">Dubai Driver's Compliance Checklist</h2>
+                <p class="text-xs text-stone-600 leading-relaxed">
+                    Driving on public highways in Italy is highly organized, but camera enforcement is exceptionally strict. Make sure you complete this checklist before boarding your flight from Dubai:
+                </p>
 
-<footer class="bg-white border-t border-stone-200 py-6 text-center text-xs text-stone-400 mt-8 font-medium">
-    <p>&copy; Summer Expedition 2026. Tailored with Premium Standards.</p>
-</footer>
+                <div class="space-y-4">
+                    <div class="border-l-4 border-l-red-500 bg-red-50/40 p-4 rounded-r-xl">
+                        <h3 class="text-sm font-bold text-stone-900 mb-1">1. International Driving Permit (IDP)</h3>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            <strong>Mandatory:</strong> In Italy, your standard physical UAE/Dubai driver's license is legally insufficient on its own. You must carry an official International Driving Permit. Apply online via the ATC UAE website or RTA app (approx. 150 AED). Italian car rental desks at Venice VCE will refuse key handovers without it.
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-l-amber-500 bg-amber-50/40 p-4 rounded-r-xl">
+                        <h3 class="text-sm font-bold text-stone-900 mb-1">2. Camera-Enforced ZTL Zones</h3>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            <strong>Avoid Tickets:</strong> Historic centers in Como, Milan, and Bolzano are camera-controlled restricted zones ("Zona a Traffico Limitato" or ZTL). Entering these without a resident permit results in automated €110+ tickets. Keep your car parked in designated underground municipal lots outside historical city arches.
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-l-emerald-500 bg-emerald-50/40 p-4 rounded-r-xl">
+                        <h3 class="text-sm font-bold text-stone-900 mb-1">3. Highway Toll Ticket Handling</h3>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            <strong>Autostrada Fares:</strong> When entering Italian toll-ways (indicated by green signs), press the button and pull the paper ticket from the machine slot. Keep this safe. When exiting, select lanes marked with blue signs (representing Card payments) and slide in your ticket followed by your credit card.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-stone-200 py-6 text-center text-xs text-stone-400 mt-8 font-medium">
+        <p>&copy; Summer Expedition 2026. Tailored with Premium Standards.</p>
+    </footer>
+</div>
 
 <script>
+// State Management for Bookings
+const initialBookings = [
+    { id: "flight-dxb-nce", category: "flights", title: "Flight: Dubai (DXB) to Nice (NCE)", deadline: "Completed", status: "booked", cost: 0, estCostText: "Already Booked", notes: "Emirates Flight booked. Landing July 17th at 13:30. Collect bags and proceed directly to L2 Tramway." },
+    { id: "flight-mxp-dxb", category: "flights", title: "Flight: Milan (MXP) to Dubai (DXB)", deadline: "Completed", status: "booked", cost: 0, estCostText: "Already Booked", notes: "Return flight booked for Saturday night, July 25th." },
+    { id: "flight-nce-vce", category: "flights", title: "Flight: Nice (NCE) to Venice (VCE)", deadline: "Book by Mid-June", status: "pending", cost: 95, estCostText: "€75 - €120", notes: "Crucial! Book the morning flight on Monday, July 20th. Look for EasyJet or Volotea airlines." },
+    { id: "stay-nice", category: "stays", title: "Hotel: Nice Riviera Accommodation", deadline: "Book by June 15", status: "pending", cost: 450, estCostText: "€150/night (3 Nights)", notes: "July 17 – 20 (3 nights). Recommend staying near Jean Médecin or Port Lympia for direct Tramway connectivity." },
+    { id: "stay-dolomites", category: "stays", title: "Chalet: Dolomites (Ortisei) Stay", deadline: "Book ASAP", status: "pending", cost: 600, estCostText: "€200/night (3 Nights)", notes: "July 20 – 23 (3 nights). Ortisei is heavily recommended. Ensures direct walking access to Seceda lift." },
+    { id: "stay-como", category: "stays", title: "Hotel: Lake Como Waterfront Hotel", deadline: "Book ASAP", status: "pending", cost: 220, estCostText: "€220 (1 Night)", notes: "July 23 – 24 (1 night). Varenna is highly scenic and possesses direct ferry and mainland road links." },
+    { id: "stay-milan", category: "stays", title: "Hotel: Milan Central Stay", deadline: "Book by June 30", status: "pending", cost: 150, estCostText: "€150 (1 Night)", notes: "July 24 – 25 (1 night). Choose a hotel near Milano Centrale or Brera for simple transport connectivity." },
+    { id: "car-rental", category: "flights", title: "Rental: One-Way Car (VCE to MXP)", deadline: "Book by June 25", status: "pending", cost: 240, estCostText: "€160 + €80 drop fee", notes: "Rent from Venice Airport (July 20th) and drop off at Milano Centrale or Malpensa (July 24th). Multi-day discounts apply." },
+    { id: "permit-idp", category: "experiences", title: "Docs: International Driving Permit (IDP)", deadline: "Secure by July 10", status: "pending", cost: 35, estCostText: "Approx. 150 AED", notes: "Legally mandatory for UAE licenses in Italy. Apply instantly on RTA or ATC UAE websites." },
+    { id: "tickets-supper", category: "experiences", title: "Tickets: Milan Last Supper", deadline: "Check Instantly!", status: "pending", cost: 15, estCostText: "€15 per person", notes: "Extremely critical. Tickets sell out months in advance. Check Cenacolo Vinciano official portal instantly." },
+    { id: "tickets-boat", category: "experiences", title: "Booking: Como Wooden Boat Charter", deadline: "Book by July 10", status: "pending", cost: 150, estCostText: "€120 - €180 (Optional)", notes: "Charter a private 1-2 hour boat from Varenna or Bellagio. No license required." }
+];
+
+let bookings = JSON.parse(localStorage.getItem('expedition_bookings')) || initialBookings;
+
 const itineraryData = [
     {
         day: "Day 1 — July 17 (Friday)",
         title: "French Riviera Grounding",
         location: "Nice, France",
+        photo: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
         desc: "Land at Nice Airport (NCE) at 13:30 on a direct flight from Dubai. Board the modern, clean L2 Tramway line directly outside the arrivals terminal and ride straight into the town center. After checking in, stroll around Vieux Nice (Old Town) and walk up to Castle Hill for an iconic French Riviera sunset view.",
         transits: [{ mode: "Tram", route: "Nice Airport to Town Center", time: "30 mins", cost: "€1.50" }],
         activities: "Walk along the historic Promenade des Anglais, dinner around Cours Saleya market square."
@@ -168,7 +304,8 @@ const itineraryData = [
     {
         day: "Day 2 — July 18 (Saturday)",
         title: "Perched Alleys & Monte Carlo Glamour",
-        location: "Èze & Monaco",
+        location: "Èze \& Monaco",
+        photo: "https://images.unsplash.com/photo-1527239441953-caffd968d952?auto=format&fit=crop&w=800&q=80",
         desc: "Ride the Lignes d'Azur clifftop bus up the Moyenne Corniche to the breathtaking medieval village of Èze. Explore its stone paths and climb up to the exotic gardens at the top. After lunch, catch the bus further east into Monaco to stroll around Monte Carlo.",
         transits: [
             { mode: "Bus", route: "Nice to Èze Village", time: "30 mins", cost: "€1.50" },
@@ -179,8 +316,9 @@ const itineraryData = [
     },
     {
         day: "Day 3 — July 19 (Sunday)",
-        title: "Coastal Ramparts & Film Festival Sights",
-        location: "Antibes & Cannes",
+        title: "Coastal Ramparts \& Film Festival Sights",
+        location: "Antibes \& Cannes",
+        photo: "https://images.unsplash.com/photo-1534430480872-3498386e77b1?auto=format&fit=crop&w=800&q=80",
         desc: "Take the morning regional train west along the Riviera coast. Stop in Antibes to wander the 16th-century sea fortifications and admire mega-yachts. Proceed to Cannes to walk down the palm-lined boulevard of La Croisette and see the steps of the Palace of Festivals.",
         transits: [
             { mode: "Train", route: "Nice to Antibes", time: "25 mins", cost: "€4.90" },
@@ -191,8 +329,9 @@ const itineraryData = [
     },
     {
         day: "Day 4 — July 20 (Monday)",
-        title: "Nice Flight & Direct Alpine Drive",
+        title: "Nice Flight \& Direct Alpine Drive",
         location: "Nice &rarr; Venice &rarr; Dolomites",
+        photo: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=800&q=80",
         desc: "Board your morning flight to Venice Marco Polo Airport (VCE). Collect your rental car directly from the airport terminal. Hit the highway north on the A27, crossing the plains and winding up into the majestic Dolomites, arriving in the high alpine valley of Val Gardena.",
         transits: [
             { mode: "Flight", route: "Nice (NCE) to Venice (VCE)", time: "1h 15m", cost: "Approx. €75 - €120" },
@@ -204,6 +343,7 @@ const itineraryData = [
         day: "Day 5 — July 21 (Tuesday)",
         title: "Beholding Jagged Peak Seceda",
         location: "Ortisei (Val Gardena)",
+        photo: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
         desc: "Leave the car parked today. Walk right from Ortisei village center to the Seceda cableway station. Ascend to 2,500m to take in the sheer, world-famous cliffs of the Odle mountain group. Hike along high altitude ridges and pastures.",
         transits: [{ mode: "Cable Car", route: "Seceda Gondola (Round-trip)", time: "15 mins", cost: "€38.00" }],
         activities: "Seceda summit photo walk, panoramic lunch on the sun deck of Sofie Hut."
@@ -212,35 +352,120 @@ const itineraryData = [
         day: "Day 6 — July 22 (Wednesday)",
         title: "The Iconic Tre Cime di Lavaredo Loop",
         location: "Dolomites (South Tyrol)",
+        photo: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?auto=format&fit=crop&w=800&q=80",
         desc: "Drive over stunning mountain passes early in the morning towards Cortina d'Ampezzo. Pass Lago di Misurina and ascend to Rifugio Auronzo. Embark on the spectacular, relatively flat 3.5-hour loop hike around the massive three rock pillars of Tre Cime.",
-        transits: [{ mode: "Drive", route: "Ortisei to Tre Cime & Return", time: "2h 00m each way", cost: "Fuel + €30 Toll" }],
+        transits: [{ mode: "Drive", route: "Ortisei to Tre Cime \& Return", time: "2h 00m each way", cost: "Fuel + €30 Toll" }],
         activities: "Tre Cime Loop Hike, lake Landro photo stop, mountain driving."
     },
     {
         day: "Day 7 — July 23 (Thursday)",
         title: "Scenic Road Trip down to Lake Como",
         location: "Dolomites &rarr; Lake Como",
+        photo: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=800&q=80",
         desc: "Check out of Ortisei and drive west across the Italian lake country. Take the highway and lakeside winding roads down to Lake Como. Spend your afternoon and evening checking into your hotel, and exploring the towns of Varenna or Bellagio.",
         transits: [{ mode: "Drive", route: "Ortisei to Lake Como (Varenna)", time: "3h 45m drive", cost: "Fuel + Tolls" }],
         activities: "Ferry rides across Lake Como, lakeside wine tasting, historic villa gardens."
     },
     {
         day: "Day 8 — July 24 (Friday)",
-        title: "Lake Como Morning & Milan Arrival",
+        title: "Lake Como Morning \& Milan Arrival",
         location: "Lake Como &rarr; Milan",
+        photo: "https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?auto=format&fit=crop&w=800&q=80",
         desc: "Enjoy a relaxed breakfast overlooking the lake, followed by a boat ride to Bellagio or a visit to the botanical gardens of Villa Carlotta. In the early afternoon, make the quick 1-hour drive down to Milan, drop off the rental car, and settle in.",
         transits: [{ mode: "Drive", route: "Lake Como to Milan (Centrale Drop)", time: "1h 00m drive", cost: "Fuel" }],
         activities: "Como private boat cruise, Milan Navigli canals evening aperitivo."
     },
     {
         day: "Day 9 — July 25 (Saturday)",
-        title: "Milan Elegance & Departure to Dubai",
+        title: "Milan Elegance \& Departure to Dubai",
         location: "Milan &rarr; Dubai",
+        photo: "https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?auto=format&fit=crop&w=800&q=80",
         desc: "Spend your entire final day exploring the cultural and fashion capital of Lombardy. Walk Sforza Castle, view the marble spires of the Duomo, and explore the luxury Quadrilatero della Moda district. In the late afternoon, take the Malpensa Express to Terminal 1 for your flight home.",
         transits: [{ mode: "Train", route: "Milano Centrale to Malpensa (MXP)", time: "50 mins", cost: "€13.00" }],
         activities: "Duomo Terraces, Milan high-street shopping, overnight departure flight."
     }
 ];
+
+// Confetti Particle Celebration Animation Logic (Pure HTML5 Canvas)
+const canvas = document.getElementById("celebrationCanvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+let animId;
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+
+function spawnConfetti() {
+    resizeCanvas();
+    canvas.classList.remove("hidden");
+    particles = [];
+    for (let i = 0; i < 150; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * canvas.height,
+            color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+            tilt: Math.random() * 10 - 5,
+            tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+            tiltAngle: 0
+        });
+    }
+    animateConfetti();
+}
+
+function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let complete = true;
+    particles.forEach(p => {
+        p.tiltAngle += p.tiltAngleIncremental;
+        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+        p.x += Math.sin(p.tiltAngle);
+        p.tilt = Math.sin(p.tiltAngle - p.r / 2) * 5;
+
+        if (p.y < canvas.height) complete = false;
+
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+        ctx.stroke();
+    });
+
+    if (!complete) {
+        animId = requestAnimationFrame(animateConfetti);
+    } else {
+        canvas.classList.add("hidden");
+        cancelAnimationFrame(animId);
+    }
+}
+
+// Exit Cover Handling
+function exitCover(mood) {
+    const cover = document.getElementById("cover-page");
+    const app = document.getElementById("main-app");
+    
+    if (mood === 'happy') {
+        spawnConfetti();
+    }
+    
+    cover.classList.add("opacity-0", "scale-95");
+    setTimeout(() => {
+        cover.style.display = "none";
+        app.style.display = "flex";
+        setTimeout(() => {
+            app.classList.remove("opacity-0");
+            app.classList.add("opacity-100");
+            if (mood === 'convince') {
+                document.querySelector('[data-target="gallery"]').click();
+            }
+        }, 50);
+    }, 700);
+}
 
 function renderTimeline() {
     const box = document.getElementById('timeline-box');
@@ -269,13 +494,18 @@ function renderTimeline() {
 
         const card = `
             <div class="accordion-item bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm">
-                <button class="w-full px-5 py-4 flex justify-between items-center text-left focus:outline-none" onclick="toggleAccordion(${index})">
-                    <div>
-                        <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">${item.day}</span>
-                        <h3 class="text-base font-bold text-stone-900 mt-0.5">${item.title}</h3>
-                        <span class="text-xs text-stone-500 mt-0.5 block">&#128205; ${item.location}</span>
+                <button class="w-full text-left focus:outline-none" onclick="toggleAccordion(${index})">
+                    <div class="relative h-24 sm:h-32 w-full overflow-hidden">
+                        <img src="${item.photo}" class="w-full h-full object-cover animate-pulse" style="animation-duration: 3s" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/15 p-5 flex justify-between items-end">
+                            <div>
+                                <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block">${item.day}</span>
+                                <h3 class="text-base sm:text-xl font-bold text-white mt-0.5 leading-tight">${item.title}</h3>
+                                <span class="text-xs text-stone-300 mt-0.5 block">&#128205; ${item.location}</span>
+                            </div>
+                            <span class="accordion-icon text-white text-2xl font-bold">&#9662;</span>
+                        </div>
                     </div>
-                    <span class="accordion-icon text-stone-400 text-xl">&#9662;</span>
                 </button>
                 <div class="accordion-content bg-stone-50/50 px-5 border-t border-stone-100">
                     <p class="text-xs text-stone-600 leading-relaxed py-4">${item.desc}</p>
@@ -307,6 +537,101 @@ function toggleAccordion(index) {
     });
 }
 
+// Checklist Filtering & Rendering
+let activeFilter = 'all';
+
+function filterChecklist(cat) {
+    activeFilter = cat;
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('bg-stone-900', 'text-white', 'border-stone-200');
+        btn.classList.add('bg-white', 'text-stone-600', 'border', 'border-stone-200');
+    });
+    
+    // Highlight the pressed filter button
+    const target = event ? event.target : document.querySelector(`[onclick="filterChecklist('${cat}')"]`);
+    if(target) {
+        target.classList.add('bg-stone-900', 'text-white');
+        target.classList.remove('bg-white', 'text-stone-600', 'border');
+    }
+    
+    renderChecklist();
+}
+
+function toggleBookingStatus(id) {
+    const idx = bookings.findIndex(b => b.id === id);
+    if(idx !== -1) {
+        // Don't toggle the pre-loaded flights since they are already done
+        if(bookings[idx].deadline === "Completed") return;
+
+        bookings[idx].status = bookings[idx].status === 'booked' ? 'pending' : 'booked';
+        localStorage.setItem('expedition_bookings', JSON.stringify(bookings));
+        renderChecklist();
+        calculateReadiness();
+    }
+}
+
+function calculateReadiness() {
+    const total = bookings.length;
+    const completed = bookings.filter(b => b.status === 'booked').length;
+    const pct = Math.round((completed / total) * 100);
+    
+    document.getElementById('readiness-pct').textContent = `${pct}%`;
+    document.getElementById('readiness-bar').style.width = `${pct}%`;
+    document.getElementById('booked-count').textContent = `${completed} / ${total} Locked`;
+    
+    // Estimate remaining cost
+    const remaining = bookings
+        .filter(b => b.status === 'pending')
+        .reduce((sum, item) => sum + item.cost, 0);
+        
+    document.getElementById('remaining-cost').textContent = `€${remaining.toLocaleString()}`;
+}
+
+function renderChecklist() {
+    const container = document.getElementById('checklist-box');
+    container.innerHTML = '';
+    
+    const filtered = bookings.filter(b => activeFilter === 'all' || b.category === activeFilter);
+    
+    filtered.forEach(item => {
+        const isBooked = item.status === 'booked';
+        const isPreFlight = item.deadline === "Completed";
+        
+        const cardHTML = `
+            <div class="bg-white border ${isBooked ? 'border-emerald-200 bg-emerald-50/10' : 'border-stone-200'} rounded-xl p-4 shadow-sm transition-all">
+                <div class="flex items-start gap-3">
+                    <!-- Custom Styled Checkbox -->
+                    <button class="mt-0.5 focus:outline-none flex-shrink-0" onclick="toggleBookingStatus('${item.id}')" ${isPreFlight ? 'disabled' : ''}>
+                        <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${isBooked ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-stone-300 bg-white hover:border-stone-400'}">
+                            ${isBooked ? '&#10004;' : ''}
+                        </div>
+                    </button>
+                    
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <h4 class="text-sm font-bold ${isBooked ? 'text-stone-500 line-through' : 'text-stone-900'}">${item.title}</h4>
+                                <span class="text-[10px] uppercase font-bold tracking-wider ${isBooked ? 'text-emerald-600' : 'text-amber-600'} mt-1 block">
+                                    ${isPreFlight ? 'Confirmed Booking' : 'Deadline: ' + item.deadline}
+                                </span>
+                            </div>
+                            <span class="text-xs font-bold text-stone-800 bg-stone-100 px-2 py-1 rounded">
+                                ${item.estCostText}
+                            </span>
+                        </div>
+                        
+                        <p class="text-xs text-stone-500 mt-2 leading-relaxed bg-stone-50 p-2.5 rounded-lg border border-stone-100">
+                            ${item.notes}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += cardHTML;
+    });
+}
+
 function setupTabs() {
     const links = document.querySelectorAll('.tab-link');
     const contents = document.querySelectorAll('.tab-content');
@@ -322,6 +647,11 @@ function setupTabs() {
 
             contents.forEach(c => c.classList.remove('active'));
             document.getElementById(link.dataset.target).classList.add('active');
+            
+            if(link.dataset.target === 'checklist') {
+                renderChecklist();
+                calculateReadiness();
+            }
         });
     });
 }
@@ -379,6 +709,8 @@ function initCharts() {
 document.addEventListener('DOMContentLoaded', () => {
     setupTabs();
     renderTimeline();
+    renderChecklist();
+    calculateReadiness();
     setTimeout(initCharts, 150);
 });
 </script>
